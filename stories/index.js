@@ -29,14 +29,14 @@ class TableData {
   constructor (items = 12) {
     this.columns = [
       {title: 'Number', field: 'number'},
-      {title: 'Firstname', field: 'name1'},
-      {title: 'Lastname', field: 'name2'}
+      {title: 'Firstname', field: 'first'},
+      {title: 'Lastname', field: 'last'}
     ]
     const ui = new UniqueInteger()
     this.data = Array(items).fill().map(() => ({
       number: ui.get({ min: 1000, max: 1999 }),
-      name1: chance.first(),
-      name2: chance.last()
+      first: chance.first(),
+      last: chance.last()
     }))
   }
   search ({ search = '', skip, limit, order, direction }) {
@@ -70,8 +70,8 @@ class TableData {
       const results = (!search
         ? this.data
         : this.data.filter(item =>
-          item.name1.toLowerCase().indexOf(search) !== -1 ||
-          item.name2.toLowerCase().indexOf(search) !== -1
+          item.first.toLowerCase().indexOf(search) !== -1 ||
+          item.last.toLowerCase().indexOf(search) !== -1
         )).sort(sorter)
       const count = results.length
       const data = skip || limit
@@ -210,9 +210,7 @@ storiesOf('MaterialTableRemote', module)
       constructor (props) {
         super(props)
         this.state = {
-          page: 0,
-          limit: 5,
-          totalCount: 0,
+          totalCount: 0
         }
         this.selected = {}
       }
@@ -227,9 +225,8 @@ storiesOf('MaterialTableRemote', module)
         console.log('search', {search, limit, skip, order, direction})
         this.setState(()=> ({ loading: true }))
         td.search({search, limit, skip, order, direction}).then(result => {
-          // store
+          // store -> onChange
           const { data, count } = result
-          // onChange
           console.log('result', { data, count })
           this.setState(() => ({ loading: false, data, totalCount: count }))
         })
