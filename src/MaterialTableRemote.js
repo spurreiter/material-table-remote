@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import MaterialTable, { MTable } from 'material-table'
 
@@ -15,10 +15,6 @@ export default class MaterialTableRemote extends Component {
     }
   }
 
-  onFetch () {
-    const { search, page, limit, order, direction } = this.state
-    this.props.onFetch({search, page, limit, order, direction})
-  }
   onSelectionChange = (selectedRows, dataClicked) => {
     const { selected } = this.state
     const { tableData, ...item } = dataClicked
@@ -28,16 +24,16 @@ export default class MaterialTableRemote extends Component {
     } else {
       delete selected[id]
     }
-    this.setState({ selected })
-    this.props.onSelectionChange && this.props.onSelectionChange(Object.values(selected))
+    this.setState({ selected }, () => {
+      const { onSelectionChange } = this.props
+      onSelectionChange && onSelectionChange(Object.values(selected))
+    })
   }
-  onOrderChange = (column, direction) => {
-    console.log(this.props.columns[column].field, column, direction) // TODO: implement
-    const order = this.props.columns[column].field
-    this.setState({order, direction}, () => this.onFetch())
+  onOrderChange = (column, order) => {
+    const orderBy = this.props.columns[column].field
+    this.setState({ orderBy, order }, () => this.onFetch())
   }
   onSearchChange = (search) => {
-    const { limit } = this.state
     this.setState({ search, page: 0 }, () => this.onFetch())
   }
   onChangePage = (page) => {
@@ -47,6 +43,12 @@ export default class MaterialTableRemote extends Component {
     const { page, limit } = this.state
     const _page = Math.floor((page * limit) / pageSize)
     this.setState({ page: _page, limit: pageSize }, () => this.onFetch())
+  }
+
+  onFetch () {
+    const { search, page, limit, orderBy, order } = this.state
+    const skip = page * limit
+    this.props.onFetch({ search, page, skip, limit, orderBy, order })
   }
 
   render () {
@@ -59,7 +61,7 @@ export default class MaterialTableRemote extends Component {
       onOrderChange,
       onSelectionChange
     } = this
-    const data = checked(this.props.selectionId, selected, this.props.data)
+    const data = checkmark(this.props.selectionId, selected, this.props.data)
     const _props = {
       ...props,
       page,
@@ -94,12 +96,12 @@ MaterialTableRemote.defaultProps = {
  * @param {object} selected
  * @param {array<object>} data
  */
-function checked (selectionId, selected, data) {
+function checkmark (selectionId, selected, data) {
   return (data || []).map(item => {
     const _id = item[selectionId]
     const obj = selected[_id]
       ? { tableData: { checked: true } }
       : {}
-    return Object.assign(obj, item)
+    return Object.assign({}, item, obj)
   })
 }

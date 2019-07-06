@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
-import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-import { linkTo } from '@storybook/addon-links';
+import { storiesOf } from '@storybook/react'
+import { action } from '@storybook/addon-actions'
+// import { linkTo } from '@storybook/addon-links'
 
 import MaterialTable from 'material-table'
-import { MaterialTableRemote} from '../src'
+import { MaterialTableRemote } from '../src'
 import Chance from 'chance'
 
 const chance = new Chance()
@@ -28,9 +29,9 @@ class UniqueInteger {
 class TableData {
   constructor (items = 12) {
     this.columns = [
-      {title: 'Number', field: 'number'},
-      {title: 'Firstname', field: 'first'},
-      {title: 'Lastname', field: 'last'}
+      { title: 'Number', field: 'number' },
+      { title: 'Firstname', field: 'first' },
+      { title: 'Lastname', field: 'last' }
     ]
     const ui = new UniqueInteger()
     this.data = Array(items).fill().map(() => ({
@@ -39,7 +40,7 @@ class TableData {
       last: chance.last()
     }))
   }
-  search ({ search = '', skip, limit, order, direction }) {
+  search ({ search = '', skip, limit, orderBy, order }) {
     // console.log({search, skip, limit})
     // debugger
     search = search.toLowerCase()
@@ -47,16 +48,16 @@ class TableData {
     const isNumber = (n) => /^[\d.]+$/.test(n)
 
     const sorter = (a, b) => {
-      if (order) {
-        const _a = a[order]
-        const _b = b[order]
+      if (orderBy) {
+        const _a = a[orderBy]
+        const _b = b[orderBy]
         const areNumbers = isNumber(_a) && isNumber(_b)
         if (areNumbers) {
-          return direction === 'asc'
+          return order === 'asc'
             ? _a - _b
             : _b - _a
         }
-        if (direction === 'asc') {
+        if (order === 'asc') {
           return String(_a).localeCompare(_b)
         } else {
           return String(_b).localeCompare(_a)
@@ -100,21 +101,21 @@ storiesOf('MaterialTableRemote', module)
         this.state = {
           page: 0,
           limit: 5,
-          totalCount: 0,
+          totalCount: 0
         }
         this.selected = {}
       }
       componentDidMount () {
         const { page, limit } = this.state
-        this.actionSearch({page, limit})
+        this.actionSearch({ page, limit })
       }
 
       // action
-      actionSearch ({search, page, limit}) {
+      actionSearch ({ search, page, limit }) {
         const skip = page * limit
-        console.log('search', {search, limit, skip})
-        this.setState(()=> ({ loading: true }))
-        td.search({search, limit, skip}).then(result => {
+        console.log('search', { search, limit, skip })
+        this.setState(() => ({ loading: true }))
+        td.search({ search, limit, skip }).then(result => {
           // store
           const { data, limit, skip, count } = result
           // onChange
@@ -152,17 +153,17 @@ storiesOf('MaterialTableRemote', module)
       }
       onSearchChange = (search) => {
         const { limit } = this.state
-        this.actionSearch({search, page: 0, limit})
+        this.actionSearch({ search, page: 0, limit })
       }
       onChangePage = (page) => {
         const { search, limit } = this.state
-        this.actionSearch({search, page, limit})
+        this.actionSearch({ search, page, limit })
       }
       onChangeRowsPerPage = (pageSize) => {
         const { search, page, limit } = this.state
         const _page = Math.floor((page * limit) / pageSize)
         this.setState({ limit: pageSize })
-        this.actionSearch({search, page: _page, limit: pageSize})
+        this.actionSearch({ search, page: _page, limit: pageSize })
       }
 
       render () {
@@ -185,13 +186,16 @@ storiesOf('MaterialTableRemote', module)
             {...props}
             options={{
               showSelectAllCheckbox: false,
-              selection: true,
+              selection: true
             }}
           />
         )
       }
     }
 
+    TestStore.propTypes = {
+      selectionId: PropTypes.string
+    }
     TestStore.defaultProps = {
       selectionId: 'number'
     }
@@ -216,15 +220,14 @@ storiesOf('MaterialTableRemote', module)
       }
       componentDidMount () {
         const { page, limit } = this.state
-        this.actionSearch({page, limit})
+        this.actionSearch({ page, limit })
       }
 
       // action
-      actionSearch = ({search, page, limit, order, direction}) => {
-        const skip = page * limit
-        console.log('search', {search, limit, skip, order, direction})
-        this.setState(()=> ({ loading: true }))
-        td.search({search, limit, skip, order, direction}).then(result => {
+      actionSearch = ({ search, page, skip, limit, orderBy, order }) => {
+        console.log('search', { search, limit, skip, orderBy, order })
+        this.setState(() => ({ loading: true }))
+        td.search({ search, limit, skip, orderBy, order }).then(result => {
           // store -> onChange
           const { data, count } = result
           console.log('result', { data, count })

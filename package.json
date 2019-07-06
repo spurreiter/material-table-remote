@@ -1,27 +1,54 @@
 {
-  "name": "@my/table-remote",
-  "version": "1.0.0",
+  "name": "@spurreiter/material-table-remote",
+  "version": "1.0.1",
   "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "spurreiter",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-storybook": "build-storybook",
+    "lint": "eslint --fix src stories",
     "storybook": "start-storybook -p 9001",
-    "build-storybook": "build-storybook"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "babel": {
+    "plugins": [
+      "@babel/plugin-transform-runtime",
+      "@babel/plugin-proposal-class-properties",
+      "@babel/plugin-proposal-object-rest-spread"
+    ],
+    "presets": [
+      "@babel/preset-env",
+      "@babel/react"
+    ]
+  },
   "dependencies": {
-    "material-table": "file:../material-table/material-table-1.41.0-f24.0.tgz",
+    "material-table": "file:material-table-1.41.0-f24.1.tgz",
     "react": "^16.8.6",
     "storybook": "^1.0.0"
   },
   "devDependencies": {
+    "@babel/cli": "7.5.0",
+    "@babel/core": "7.5.0",
+    "@babel/plugin-proposal-class-properties": "7.5.0",
+    "@babel/plugin-proposal-object-rest-spread": "7.5.0",
+    "@babel/plugin-transform-runtime": "7.5.0",
+    "@babel/preset-env": "^7.5.0",
+    "@babel/preset-react": "7.0.0",
     "@storybook/addon-actions": "^5.1.9",
     "@storybook/addon-links": "^5.1.9",
     "@storybook/react": "^5.1.9",
-    "babel-core": "^6.26.3",
+    "babel-eslint": "10.0.2",
     "babel-loader": "^8.0.6",
-    "chance": "^1.0.18"
+    "babel-polyfill": "^6.26.0",
+    "chance": "^1.0.18",
+    "eslint": "^6.0.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.14.2",
+    "eslint-plugin-standard": "^4.0.0"
   }
 }

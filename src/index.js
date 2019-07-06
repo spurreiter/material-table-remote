@@ -1,1 +1,1 @@
-export { default as MaterialTableRemote } from './MaterialTableRemote' 
+export { default as MaterialTableRemote } from './MaterialTableRemote'
