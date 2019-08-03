@@ -52,7 +52,7 @@ export default class MaterialTableRemote extends Component {
   }
 
   render () {
-    const { page, selected } = this.state
+    const { page, selected, limit } = this.state
     const {
       props,
       onChangePage,
@@ -62,6 +62,7 @@ export default class MaterialTableRemote extends Component {
       onSelectionChange
     } = this
     const data = checkmark(this.props.selectionId, selected, this.props.data)
+    props.options.pageSize = limit
     const _props = {
       ...props,
       page,
