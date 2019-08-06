@@ -15,14 +15,18 @@ export default class MaterialTableRemote extends Component {
     }
   }
 
-  onSelectionChange = (selectedRows, dataClicked) => {
-    const { selected } = this.state
+  onSelectionChange = (selectedRows, dataClicked = {}) => {
+    let { selected } = this.state
     const { tableData, ...item } = dataClicked
-    const id = item[this.props.selectionId]
-    if (tableData.checked) {
-      selected[id] = item
+    if (!tableData) {
+      selected = {}
     } else {
-      delete selected[id]
+      const id = item[this.props.selectionId]
+      if (tableData.checked) {
+        selected[id] = item
+      } else {
+        delete selected[id]
+      }
     }
     this.setState({ selected }, () => {
       const { onSelectionChange } = this.props
