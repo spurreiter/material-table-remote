@@ -25,7 +25,7 @@
     ]
   },
   "dependencies": {
-    "material-table": "file:material-table-1.43.1-f24.1.tgz",
+    "material-table": "file:material-table-1.45.1-f24.2.tgz",
     "react": "^16.8.6",
     "storybook": "^1.0.0"
   },
@@ -37,6 +37,7 @@
     "@babel/plugin-transform-runtime": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
+    "@material-ui/core": "^4.3.1",
     "@storybook/addon-actions": "^5.1.10",
     "@storybook/addon-links": "^5.1.10",
     "@storybook/react": "^5.1.10",
